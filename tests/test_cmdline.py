@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2017 Richard Hull and contributors
+# Copyright (c) 2017-18 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 """
@@ -25,6 +25,7 @@ class test_spi_opts(object):
     spi_port = 0
     spi_device = 0
     spi_bus_speed = 8000000
+    spi_cs_high = False
     gpio_data_command = 24
     gpio_reset = 25
     gpio_backlight = 18

@@ -26,7 +26,7 @@ Luma.Core
 
 
 
-.. image:: https://img.shields.io/maintenance/yes/2017.svg?maxAge=2592000
+.. image:: https://img.shields.io/maintenance/yes/2018.svg?maxAge=2592000
 
 **luma.core** is a component library providing a Pillow-compatible drawing
 canvas, and other functionality to support drawing primitives and
@@ -70,7 +70,7 @@ License
 -------
 The MIT License (MIT)
 
-Copyright (c) 2017 Richard Hull & Contributors
+Copyright (c) 2017-18 Richard Hull and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

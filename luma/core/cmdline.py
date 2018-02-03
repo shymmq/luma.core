@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2017 Richard Hull and contributors
+# Copyright (c) 2017-18 Richard Hull and contributors
 # See LICENSE.rst for details.
 
 import atexit
@@ -138,7 +138,15 @@ class make_serial(object):
 
         if hasattr(self.opts, 'gpio') and self.opts.gpio is not None:
             GPIO = importlib.import_module(self.opts.gpio)
-            GPIO.setmode(GPIO.BCM)
+
+            if hasattr(self.opts, 'gpio_mode') and self.opts.gpio_mode is not None:
+                (packageName, _, attrName) = self.opts.gpio_mode.rpartition('.')
+                pkg = importlib.import_module(packageName)
+                mode = getattr(pkg, attrName)
+                GPIO.setmode(mode)
+            else:
+                GPIO.setmode(GPIO.BCM)
+
             atexit.register(GPIO.cleanup)
         else:
             GPIO = None
@@ -146,6 +154,7 @@ class make_serial(object):
         return spi(port=self.opts.spi_port,
                    device=self.opts.spi_device,
                    bus_speed_hz=self.opts.spi_bus_speed,
+                   cs_high=self.opts.spi_cs_high,
                    gpio_DC=self.opts.gpio_data_command,
                    gpio_RST=self.opts.gpio_reset,
                    gpio=self.gpio or GPIO)
@@ -222,9 +231,11 @@ def create_parser(description):
     spi_group.add_argument('--spi-port', type=int, default=0, help='SPI port number')
     spi_group.add_argument('--spi-device', type=int, default=0, help='SPI device')
     spi_group.add_argument('--spi-bus-speed', type=int, default=8000000, help='SPI max bus speed (Hz)')
+    spi_group.add_argument('--spi-cs-high', type=bool, default=False, help='SPI chip select is high')
 
     gpio_group = parser.add_argument_group('GPIO')
     gpio_group.add_argument('--gpio', type=str, default=None, help='Alternative RPi.GPIO compatible implementation (SPI devices only)')
+    gpio_group.add_argument('--gpio-mode', type=str, default=None, help='Alternative pin mapping mode (SPI devices only)')
     gpio_group.add_argument('--gpio-data-command', type=int, default=24, help='GPIO pin for D/C RESET (SPI devices only)')
     gpio_group.add_argument('--gpio-reset', type=int, default=25, help='GPIO pin for RESET (SPI devices only)')
     gpio_group.add_argument('--gpio-backlight', type=int, default=18, help='GPIO pin for backlight (PCD8544, ST7735 devices only)')
