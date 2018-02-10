@@ -192,7 +192,7 @@ class terminal(object):
     that has :class:`mixin.capabilities` characteristics).
     """
     def __init__(self, device, font=None, color="white", bgcolor="black",
-                 tabstop=4, line_height=None, animate=True, word_wrap=False):
+                 tabstop=4, line_height=None, animate=True, word_wrap=False, animation_delay=0.2):
         self._device = device
         self.font = font or ImageFont.load_default()
         self.default_fgcolor = color
@@ -200,6 +200,7 @@ class terminal(object):
         self.animate = animate
         self.tabstop = tabstop
         self.word_wrap = word_wrap
+        self.animation_delay = animation_delay
 
         self._cw, self._ch = (0, 0)
         for i in range(32, 128):
@@ -274,7 +275,7 @@ class terminal(object):
         codes are also supported.
 
         If the ``animate`` flag was set to True (default), then each character
-        is flushed to the device, giving the effect of 1970's teletype device.
+        is flushed to the device with a delay of ``animation_delay``, giving the effect of 1970's teletype device.
 
         :type text: str
         """
@@ -349,7 +350,7 @@ class terminal(object):
 
         self.flush()
         if self.animate:
-            time.sleep(0.2)
+            time.sleep(self.animation_delay)
 
     def backspace(self):
         """
